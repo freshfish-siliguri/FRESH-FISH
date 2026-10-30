@@ -71,6 +71,7 @@ function closeCart(){document.getElementById("overlay").style.display="none"}
 document.getElementById("search").addEventListener("input",render);document.getElementById("sort").addEventListener("change",render);
 document.getElementById("checkout").addEventListener("submit",e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target));let id="FF"+Date.now().toString().slice(-7);let lines=products.filter(p=>cart[p.id]).map(p=>`${p.bn} (${p.en}) x ${cart[p.id]} = Rs.${Math.round(p.price*cart[p.id])}`).join("\n");let total=products.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);document.getElementById("confirmation").style.display="block";document.getElementById("confirmation").innerHTML=`<b>Demo order created! / ডেমো অর্ডার তৈরি হয়েছে!</b><br>Order ID: <b>${id}</b><br>Name: ${data.name}<br>Subtotal: ₹${Math.round(total)}<br>Payment: ${data.payment}<br><br>এটি শুধু আপনার ফোনের demo preview। দোকানে অর্ডার পাঠানো বা পেমেন্ট নেওয়া হয়নি।`;cart={};updateCart();e.target.reset()});
 render();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
