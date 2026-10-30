@@ -79,6 +79,7 @@ async function loadProducts() {
     en: p.name,
     price: Number(p.price),
     unit: p.unit,
+    image: p.image_url,
     emoji: p.category === "Fish" ? "🐟" :
            p.category === "Chicken" ? "🍗" :
            p.category === "Mutton" ? "🥩" : "🥚"
