@@ -4,121 +4,350 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FRESH FISH | Admin</title>
+<title>FRESH FISH | Admin Dashboard</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f7f3;color:#20352a}
-header{background:#176b3a;color:white;padding:20px}
-header h2{margin:0}
-header p{margin:6px 0 0;font-size:13px}
-main{max-width:700px;margin:auto;padding:18px}
-.card{background:white;padding:18px;border-radius:14px;margin:14px 0;box-shadow:0 2px 10px #0000000c}
-input,button{width:100%;padding:13px;margin:7px 0;border-radius:8px;border:1px solid #ccc;font-size:15px}
-button{background:#176b3a;color:white;border:0;font-weight:bold}
-button.secondary{background:#e8f2eb;color:#176b3a}
-.small{font-size:13px;color:#66756b}
-.hidden{display:none}
-.stat{font-size:26px;font-weight:bold;color:#176b3a}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f7f3;
+  color: #20352a;
+}
+
+header {
+  background: #176b3a;
+  color: white;
+  padding: 20px;
+}
+
+header h2 {
+  margin: 0;
+}
+
+header p {
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+main {
+  max-width: 700px;
+  margin: auto;
+  padding: 18px;
+}
+
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  margin: 14px 0;
+  box-shadow: 0 2px 10px #0000000c;
+}
+
+input, button {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+button {
+  background: #176b3a;
+  color: white;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: #e8f2eb;
+  color: #176b3a;
+}
+
+.small {
+  font-size: 13px;
+  color: #66756b;
+}
+
+.message {
+  overflow-wrap: anywhere;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.stat {
+  font-size: 26px;
+  font-weight: bold;
+  color: #176b3a;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<h2>🐟 FRESH FISH</h2>
-<p>Admin Dashboard · Siliguri</p>
+  <h2>🐟 FRESH FISH</h2>
+  <p>Admin Dashboard · Siliguri</p>
 </header>
 
 <main>
-<section id="login" class="card">
-<h3>Admin Login</h3>
-<p class="small">Login with your authorised admin account.</p>
-<input id="email" type="email" placeholder="Admin email">
-<input id="password" type="password" placeholder="Password">
-<button onclick="loginAdmin()">LOGIN</button>
-<p id="message" class="small"></p>
-</section>
 
-<section id="dashboard" class="hidden">
-<div class="card">
-<h3>Welcome, Admin!</h3>
-<p class="small">FRESH FISH management panel</p>
-<button class="secondary" onclick="logoutAdmin()">LOG OUT</button>
-</div>
+  <!-- ADMIN LOGIN -->
+  <section id="login" class="card">
+    <h3>Admin Login</h3>
+    <p class="small">Login with your authorised admin account.</p>
 
-<div class="card">
-<h3>📦 Orders</h3>
-<p class="small">Your customer orders will appear here after the secure order connection is configured.</p>
-<div class="stat">—</div>
-<p class="small">Orders awaiting connection</p>
-</div>
+    <form id="loginForm">
+      <input
+        id="email"
+        type="email"
+        placeholder="Admin email"
+        autocomplete="username"
+        required
+      >
 
-<div class="card">
-<h3>🐠 Products</h3>
-<p class="small">Product management connection is not configured yet.</p>
-</div>
+      <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        required
+      >
 
-<div class="card">
-<h3>💳 Payment Verification</h3>
-<p class="small">Verify UPI payments manually against your UPI app. Never trust a customer-submitted screenshot alone.</p>
-</div>
+      <button id="loginButton" type="submit">LOGIN</button>
+    </form>
 
-<div class="card">
-<h3>🚚 Delivery Management</h3>
-<p class="small">Delivery status management will be connected next.</p>
-</div>
+    <p id="message" class="small message"></p>
+  </section>
 
-<div class="card">
-<h3>📊 Sales Reports</h3>
-<p class="small">Sales reports will appear after the order database is connected.</p>
-</div>
-</section>
+  <!-- ADMIN DASHBOARD -->
+  <section id="dashboard" class="hidden">
+
+    <div class="card">
+      <h3>Welcome, Admin! 👋</h3>
+      <p class="small">FRESH FISH management panel</p>
+      <button class="secondary" id="logoutButton" type="button">
+        LOG OUT
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>📦 Orders</h3>
+      <p class="small">
+        Customer orders will appear here after the order management
+        feature is connected.
+      </p>
+      <div class="stat">—</div>
+      <p class="small">Orders awaiting connection</p>
+    </div>
+
+    <div class="card">
+      <h3>🐠 Products</h3>
+      <p class="small">
+        Product management will be connected in the next setup step.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>💳 Payment Verification</h3>
+      <p class="small">
+        Verify UPI payments manually against your UPI app.
+        Never trust a customer-submitted screenshot alone.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>🚚 Delivery Management</h3>
+      <p class="small">
+        Delivery management will be connected after order management.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>📊 Sales Reports</h3>
+      <p class="small">
+        Sales reports will appear after the order database is connected.
+      </p>
+    </div>
+
+  </section>
+
 </main>
+
+<!-- SUPABASE LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
- const SUPABASE_URL = "mjoonomfrolnsruvbrub";
-const SUPABASE_KEY = "sb_publishable_8GCXpEAdxGpXTfabs_VnhQ_5HykfCf7";
+
+// =====================================
+// SUPABASE CONFIGURATION
+// =====================================
+
+const SUPABASE_URL = "https://mjoonomfrolnsruvbrub.supabase.co";
+
+const SUPABASE_KEY = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qb29ub21mcm9sbnNydXZicnViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNDU0OTAsImV4cCI6MjEwODkyMTQ5MH0.eOjm_8csa89s6rNwUdmHwrpr8Uikm-1ihi6cOgoG9K8";
+
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
-// Supabase authentication will be connected after secure configuration.
-async function loginAdmin() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const message = document.getElementById("message");
 
-  message.textContent = "Logging in...";
+// =====================================
+// ELEMENTS
+// =====================================
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
+const loginSection = document.getElementById("login");
+const dashboardSection = document.getElementById("dashboard");
+const message = document.getElementById("message");
+const loginButton = document.getElementById("loginButton");
 
-  if (error) {
-    message.textContent = "Login failed: " + error.message;
-    return;
-  }
+// =====================================
+// CHECK ADMIN AUTHORIZATION
+// =====================================
 
-  const { data: admin, error: adminError } = await supabaseClient
+async function checkAdmin(user) {
+
+  const { data, error } = await supabaseClient
     .from("admin_users")
     .select("user_id")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .maybeSingle();
 
-  if (adminError || !admin) {
-    await supabaseClient.auth.signOut();
-    message.textContent = "You are not an authorised admin.";
+  if (error) {
+    console.error("Admin check error:", error);
+    return false;
+  }
+
+  return !!data;
+}
+
+// =====================================
+// SHOW DASHBOARD
+// =====================================
+
+function showDashboard() {
+  loginSection.classList.add("hidden");
+  dashboardSection.classList.remove("hidden");
+}
+
+// =====================================
+// SHOW LOGIN
+// =====================================
+
+function showLogin() {
+  dashboardSection.classList.add("hidden");
+  loginSection.classList.remove("hidden");
+}
+
+// =====================================
+// ADMIN LOGIN
+// =====================================
+
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  message.textContent = "Logging in...";
+  loginButton.disabled = true;
+
+  try {
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      message.textContent = "Login failed: " + error.message;
+      return;
+    }
+
+    const authorised = await checkAdmin(data.user);
+
+    if (!authorised) {
+      await supabaseClient.auth.signOut();
+      message.textContent = "You are not an authorised admin.";
+      return;
+    }
+
+    message.textContent = "";
+    showDashboard();
+
+  } catch (error) {
+
+    message.textContent = "Something went wrong. Please try again.";
+    console.error(error);
+
+  } finally {
+
+    loginButton.disabled = false;
+
+  }
+
+});
+
+// =====================================
+// ADMIN LOGOUT
+// =====================================
+
+document.getElementById("logoutButton").addEventListener("click", async function() {
+
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    message.textContent = "Logout failed: " + error.message;
     return;
   }
 
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("dashboard").classList.remove("hidden");
+  document.getElementById("password").value = "";
   message.textContent = "";
+  showLogin();
+
+});
+
+// =====================================
+// RESTORE EXISTING SESSION
+// =====================================
+
+async function restoreSession() {
+
+  const { data, error } = await supabaseClient.auth.getSession();
+
+  if (error || !data.session) {
+    showLogin();
+    return;
+  }
+
+  const authorised = await checkAdmin(data.session.user);
+
+  if (authorised) {
+    showDashboard();
+  } else {
+    await supabaseClient.auth.signOut();
+    showLogin();
+    message.textContent = "You are not an authorised admin.";
+  }
+
 }
-function logoutAdmin(){
- document.getElementById("dashboard").classList.add("hidden");
- document.getElementById("login").classList.remove("hidden");
-}
+
+restoreSession();
+
 </script>
+
 </body>
 </html>
