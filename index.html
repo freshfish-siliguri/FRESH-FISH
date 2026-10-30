@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FRESH FISH — Freshness at Your Doorstep</title>
+<style>
+:root{--green:#123b35;--green2:#1f6b55;--cream:#f6f8f4;--ink:#17231f;--muted:#68766f;--line:#e3eae4}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
+header{background:var(--green);color:white;padding:18px 16px 22px} .top{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-weight:900;font-size:24px;letter-spacing:1.5px}.tag{font-size:12px;color:#cfe5d8}
+.pill{border:1px solid #ffffff66;color:white;background:#ffffff12;padding:8px 12px;border-radius:20px;font-size:12px}
+.hero{max-width:1050px;margin:18px auto 0;padding:0 2px}.hero h1{font-size:clamp(25px,6vw,42px);line-height:1.15;margin:8px 0}.hero p{color:#d8e8df;margin:8px 0 0}
+main{max-width:1050px;margin:auto;padding:18px 14px 90px}.notice{background:#e7f1e9;border:1px solid #d1e4d6;padding:12px;border-radius:12px;font-size:13px;margin-bottom:16px}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.tools input{flex:1;min-width:180px}.tools input,.tools select,.field{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:white;font:inherit}
+.tools select{width:auto;min-width:125px}.cats{display:flex;gap:8px;overflow:auto;padding:3px 0 13px}.cat{white-space:nowrap;border:1px solid var(--line);background:white;padding:9px 13px;border-radius:22px;font-size:13px}.cat.active{background:var(--green);color:white;border-color:var(--green)}
+h2{font-size:20px;margin:18px 0 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:white;border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 2px 9px #142c1b08}.photo{height:125px;background:#e8eee8;display:flex;align-items:center;justify-content:center;font-size:55px}.info{padding:11px}.name{font-weight:750;font-size:15px}.sub{font-size:12px;color:var(--muted);margin-top:2px}.price{font-weight:800;margin:9px 0 8px}.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.btn{border:0;border-radius:10px;background:var(--green);color:white;padding:10px 13px;font-weight:700;font-size:13px}.btn.secondary{background:#e9f1ec;color:var(--green)}.qty{padding:8px;border:1px solid var(--line);border-radius:9px;background:white;max-width:110px}
+.cartbar{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);padding:11px 14px;display:flex;justify-content:center;z-index:5}.cartbar button{width:min(100%,700px);display:flex;justify-content:space-between;align-items:center;padding:14px 16px}
+.overlay{display:none;position:fixed;inset:0;background:#07150fcc;z-index:10;padding:14px;overflow:auto}.modal{max-width:560px;margin:24px auto;background:white;border-radius:17px;padding:18px}.modalhead{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#edf2ee;border-radius:50%;width:34px;height:34px;font-size:20px}.cartline{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid .full{grid-column:1/-1}label{font-size:12px;font-weight:700;display:block;margin:9px 0 5px}.hint{font-size:11px;color:var(--muted);line-height:1.5}.total{font-size:18px;font-weight:850;margin:14px 0}.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:24px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.photo{height:165px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><div class="logo">🐟 FRESH FISH</div><div class="tag">FRESHNESS AT YOUR DOORSTEP</div></div><div class="pill">SILIGURI • HOME DELIVERY</div></div>
+<div class="hero"><h1>টাটকা মাছ, মাংস ও ডিম<br>আপনার দরজায়</h1><p>Fresh Fish • Chicken • Mutton • Eggs</p></div></header>
+<main>
+<div class="notice">ℹ️ এটি FRESH FISH-এর প্রথম demo website। এখানে দেখানো দাম ও পণ্য নমুনা—অর্ডার এখনো বাস্তবে দোকানে পাঠানো হয় না।</div>
+<div class="tools"><input id="search" placeholder="মাছ বা পণ্য খুঁজুন / Search products"><select id="sort"><option value="default">Sort: Default</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option></select></div>
+<div class="cats" id="cats"></div>
+<h2 id="sectionTitle">আজকের পণ্য / Today's Products</h2>
+<div class="grid" id="products"></div>
+<div class="foot">FRESH FISH • Siliguri, West Bengal<br>Demo version — payment and live delivery are not connected yet.</div>
+</main>
+<div class="cartbar"><button class="btn" onclick="openCart()"><span>🛒 Cart / কার্ট (<b id="count">0</b>)</span><span>₹<b id="barTotal">0</b> · Checkout →</span></button></div>
+<div class="overlay" id="overlay"><div class="modal">
+<div class="modalhead"><h2 style="margin:0">Your Cart / তোমার কার্ট</h2><button class="close" onclick="closeCart()">×</button></div>
+<div id="cartItems"></div><div class="total">Subtotal / পণ্যের দাম: ₹<span id="subtotal">0</span></div>
+<h2>Delivery Details / ডেলিভারির তথ্য</h2>
+<form id="checkout">
+<div class="formgrid">
+<div class="full"><label>নাম / Full name *</label><input class="field" name="name" required placeholder="Customer name"></div>
+<div><label>মোবাইল / Phone *</label><input class="field" name="phone" required inputmode="tel" pattern="[0-9+ -]{10,15}" placeholder="10-digit number"></div>
+<div><label>Delivery area *</label><input class="field" name="area" required placeholder="Area in Siliguri"></div>
+<div class="full"><label>সম্পূর্ণ ঠিকানা / Full address *</label><textarea class="field" name="address" required rows="2" placeholder="House, road, landmark"></textarea></div>
+<div class="full"><label>লোকেশন লিংক (ঐচ্ছিক) / Map link (optional)</label><input class="field" name="location" placeholder="Google Maps link"></div>
+<div class="full"><label>পেমেন্ট / Payment method *</label><select class="field" name="payment" required><option value="Cash on Delivery">Cash on Delivery (COD)</option><option value="UPI (demo only)">UPI (not connected in demo)</option></select></div>
+</div>
+<p class="hint">UPI নির্বাচন করলে এখনো টাকা কাটা হবে না। Payment gateway যুক্ত না হওয়া পর্যন্ত এটি শুধু demo option।</p>
+<button class="btn" style="width:100%;margin-top:12px" type="submit">Place Demo Order / অর্ডার নিশ্চিত করুন</button>
+</form><div id="confirmation" class="notice" style="display:none;margin-top:14px"></div>
+</div></div>
+<script>
+const products=[
+{id:1,cat:"Fish",bn:"রুই মাছ",en:"Rohu",price:360,unit:"প্রতি কেজি / kg",emoji:"🐟"},
+{id:2,cat:"Fish",bn:"কাতলা মাছ",en:"Katla",price:400,unit:"প্রতি কেজি / kg",emoji:"🐠"},
+{id:3,cat:"Fish",bn:"ইলিশ মাছ",en:"Hilsa",price:900,unit:"প্রতি কেজি / kg",emoji:"🐟"},
+{id:4,cat:"Fish",bn:"পাবদা মাছ",en:"Pabda",price:520,unit:"প্রতি কেজি / kg",emoji:"🐡"},
+{id:5,cat:"Chicken",bn:"ব্রয়লার মুরগি",en:"Broiler Chicken",price:240,unit:"প্রতি কেজি / kg",emoji:"🍗"},
+{id:6,cat:"Mutton",bn:"খাসির মাংস",en:"Mutton",price:850,unit:"প্রতি কেজি / kg",emoji:"🥩"},
+{id:7,cat:"Eggs",bn:"মুরগির ডিম",en:"Chicken Eggs",price:7,unit:"প্রতি পিস / piece",emoji:"🥚"}
+];
+let category="All",cart={};
+const cats=["All","Fish","Chicken","Mutton","Eggs"];
+const labels={All:"সব / All",Fish:"মাছ / Fish",Chicken:"মুরগি / Chicken",Mutton:"খাসি / Mutton",Eggs:"ডিম / Eggs"};
+function renderCats(){document.getElementById("cats").innerHTML=cats.map(c=>`<button class="cat ${category===c?'active':''}" onclick="category='${c}';render()">${labels[c]}</button>`).join("")}
+function render(){renderCats();let q=document.getElementById("search").value.toLowerCase();let list=products.filter(p=>(category==="All"||p.cat===category)&&(`${p.bn} ${p.en}`).toLowerCase().includes(q));let sort=document.getElementById("sort").value;if(sort==="low")list.sort((a,b)=>a.price-b.price);if(sort==="high")list.sort((a,b)=>b.price-a.price);
+document.getElementById("products").innerHTML=list.map(p=>`<article class="card"><div class="photo">${p.emoji}</div><div class="info"><div class="name">${p.bn}</div><div class="sub">${p.en} · ${p.unit}</div><div class="price">₹${p.price} <span class="sub">/ kg or piece</span></div><div class="row"><select class="qty" id="q${p.id}"><option value="0.25">250 g</option><option value="0.5">500 g</option><option value="1" selected>1 kg / pc</option><option value="2">2 kg / pcs</option></select><button class="btn" onclick="add(${p.id})">Add +</button></div></div></article>`).join("")||"<p>No products found.</p>";updateCart()}
+function add(id){let q=Number(document.getElementById("q"+id).value);cart[id]=(cart[id]||0)+q;updateCart()}
+function updateCart(){let count=Object.values(cart).reduce((a,b)=>a+b,0);let total=products.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);document.getElementById("count").textContent=count.toFixed(2).replace(/\.?0+$/,"");document.getElementById("barTotal").textContent=Math.round(total);document.getElementById("subtotal").textContent=Math.round(total)}
+function openCart(){if(!Object.keys(cart).length){alert("কার্ট খালি / Your cart is empty");return}let rows=products.filter(p=>cart[p.id]).map(p=>`<div class="cartline"><span>${p.bn} (${p.en}) × ${cart[p.id]} kg/pcs</span><b>₹${Math.round(p.price*cart[p.id])}</b></div>`).join("");document.getElementById("cartItems").innerHTML=rows;document.getElementById("confirmation").style.display="none";document.getElementById("overlay").style.display="block"}
+function closeCart(){document.getElementById("overlay").style.display="none"}
+document.getElementById("search").addEventListener("input",render);document.getElementById("sort").addEventListener("change",render);
+document.getElementById("checkout").addEventListener("submit",e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target));let id="FF"+Date.now().toString().slice(-7);let lines=products.filter(p=>cart[p.id]).map(p=>`${p.bn} (${p.en}) x ${cart[p.id]} = Rs.${Math.round(p.price*cart[p.id])}`).join("\n");let total=products.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);document.getElementById("confirmation").style.display="block";document.getElementById("confirmation").innerHTML=`<b>Demo order created! / ডেমো অর্ডার তৈরি হয়েছে!</b><br>Order ID: <b>${id}</b><br>Name: ${data.name}<br>Subtotal: ₹${Math.round(total)}<br>Payment: ${data.payment}<br><br>এটি শুধু আপনার ফোনের demo preview। দোকানে অর্ডার পাঠানো বা পেমেন্ট নেওয়া হয়নি।`;cart={};updateCart();e.target.reset()});
+render();
+</script>
+</body></html>
