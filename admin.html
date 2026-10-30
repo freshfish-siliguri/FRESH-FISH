@@ -62,7 +62,22 @@ button.secondary{background:#e8f2eb;color:#176b3a}
 Loading orders...
 </div>
 </div>
+<div class="card">
+  <h3>🛒 Product Management</h3>
 
+  <p class="small">Add a new product</p>
+
+  <input id="productName" placeholder="Product name">
+  <input id="productCategory" placeholder="Category (Fish/Chicken/Mutton/Eggs)">
+  <input id="productPrice" type="number" placeholder="Price">
+  <input id="productUnit" placeholder="Unit (kg/piece)" value="kg">
+  <input id="productDescription" placeholder="Description">
+
+  <button id="addProductButton">➕ ADD PRODUCT</button>
+
+  <p id="productMessage" class="small"></p>
+  <div id="productsList">Loading products...</div>
+</div>
 </section>
 </main>
 
@@ -251,7 +266,113 @@ document.getElementById("logoutButton").addEventListener("click",async function(
   document.getElementById("password").value = "";
   showLogin();
 });
+// LOAD PRODUCTS
+async function loadProducts() {
+  const list = document.getElementById("productsList");
+  const msg = document.getElementById("productMessage");
 
+  list.textContent = "Loading products...";
+
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .order("id", { ascending: false });
+
+  if (error) {
+    list.textContent = "Error: " + error.message;
+    return;
+  }
+
+  list.replaceChildren();
+
+  data.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "order";
+
+    const name = document.createElement("h3");
+    name.textContent = product.name;
+
+    const info = document.createElement("p");
+    info.textContent =
+      product.category + " | ₹" + product.price +
+      " / " + product.unit +
+      " | " + (product.is_active ? "Active" : "Inactive");
+
+    const price = document.createElement("input");
+    price.type = "number";
+    price.value = product.price;
+    price.placeholder = "New price";
+
+    const update = document.createElement("button");
+    update.textContent = "UPDATE PRICE";
+
+    update.addEventListener("click", async () => {
+      const newPrice = Number(price.value);
+
+      if (!Number.isFinite(newPrice) || newPrice <= 0) {
+        alert("Enter a valid price");
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("products")
+        .update({ price: newPrice })
+        .eq("id", product.id);
+
+      if (error) {
+        alert("Update failed: " + error.message);
+      } else {
+        alert("Price updated!");
+        await loadProducts();
+      }
+    });
+
+    card.append(name, info, price, update);
+    list.appendChild(card);
+  });
+
+  msg.textContent = data.length + " product(s) found.";
+}
+
+// ADD PRODUCT
+document.getElementById("addProductButton")
+  .addEventListener("click", async () => {
+    const name = document.getElementById("productName").value.trim();
+    const category = document.getElementById("productCategory").value.trim();
+    const price = Number(document.getElementById("productPrice").value);
+    const unit = document.getElementById("productUnit").value.trim();
+    const description = document.getElementById("productDescription").value.trim();
+    const msg = document.getElementById("productMessage");
+
+    if (!name || !category || !unit || !Number.isFinite(price) || price <= 0) {
+      msg.textContent = "Please fill all required fields correctly.";
+      return;
+    }
+
+    const { error } = await supabaseClient
+      .from("products")
+      .insert([{
+        name,
+        category,
+        price,
+        unit,
+        description,
+        is_active: true
+      }]);
+
+    if (error) {
+      msg.textContent = "Error: " + error.message;
+      return;
+    }
+
+    msg.textContent = "Product added successfully!";
+    document.getElementById("productName").value = "";
+    document.getElementById("productCategory").value = "";
+    document.getElementById("productPrice").value = "";
+    document.getElementById("productDescription").value = "";
+
+    await loadProducts();
+  });
 // RESTORE SESSION
 async function restoreSession() {
   const {data,error} = await supabaseClient.auth.getSession();
