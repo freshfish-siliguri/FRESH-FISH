@@ -385,8 +385,10 @@ async function restoreSession() {
   const authorised = await checkAdmin(data.session.user);
 
   if(authorised) {
-    showDashboard();
-    await loadOrders();
+  showDashboard();
+  await loadOrders();
+  await loadProducts();
+  };
   } else {
     await supabaseClient.auth.signOut();
     showLogin();
