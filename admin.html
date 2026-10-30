@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRESH FISH | Admin</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7f3;color:#20352a}
+header{background:#176b3a;color:white;padding:20px}
+header h2{margin:0}
+header p{margin:6px 0 0;font-size:13px}
+main{max-width:700px;margin:auto;padding:18px}
+.card{background:white;padding:18px;border-radius:14px;margin:14px 0;box-shadow:0 2px 10px #0000000c}
+input,button{width:100%;padding:13px;margin:7px 0;border-radius:8px;border:1px solid #ccc;font-size:15px}
+button{background:#176b3a;color:white;border:0;font-weight:bold}
+button.secondary{background:#e8f2eb;color:#176b3a}
+.small{font-size:13px;color:#66756b}
+.hidden{display:none}
+.stat{font-size:26px;font-weight:bold;color:#176b3a}
+</style>
+</head>
+<body>
+
+<header>
+<h2>🐟 FRESH FISH</h2>
+<p>Admin Dashboard · Siliguri</p>
+</header>
+
+<main>
+<section id="login" class="card">
+<h3>Admin Login</h3>
+<p class="small">Login with your authorised admin account.</p>
+<input id="email" type="email" placeholder="Admin email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="loginAdmin()">LOGIN</button>
+<p id="message" class="small"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="card">
+<h3>Welcome, Admin!</h3>
+<p class="small">FRESH FISH management panel</p>
+<button class="secondary" onclick="logoutAdmin()">LOG OUT</button>
+</div>
+
+<div class="card">
+<h3>📦 Orders</h3>
+<p class="small">Your customer orders will appear here after the secure order connection is configured.</p>
+<div class="stat">—</div>
+<p class="small">Orders awaiting connection</p>
+</div>
+
+<div class="card">
+<h3>🐠 Products</h3>
+<p class="small">Product management connection is not configured yet.</p>
+</div>
+
+<div class="card">
+<h3>💳 Payment Verification</h3>
+<p class="small">Verify UPI payments manually against your UPI app. Never trust a customer-submitted screenshot alone.</p>
+</div>
+
+<div class="card">
+<h3>🚚 Delivery Management</h3>
+<p class="small">Delivery status management will be connected next.</p>
+</div>
+
+<div class="card">
+<h3>📊 Sales Reports</h3>
+<p class="small">Sales reports will appear after the order database is connected.</p>
+</div>
+</section>
+</main>
+
+<script>
+// Supabase authentication will be connected after secure configuration.
+function loginAdmin(){
+ document.getElementById("message").textContent =
+ "Supabase connection is not configured yet. Please wait for the next setup step.";
+}
+function logoutAdmin(){
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("login").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
