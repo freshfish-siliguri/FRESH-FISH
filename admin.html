@@ -7,196 +7,71 @@
 <title>FRESH FISH | Admin Dashboard</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f7f3;
-  color: #20352a;
-}
-
-header {
-  background: #176b3a;
-  color: white;
-  padding: 20px;
-}
-
-header h2 {
-  margin: 0;
-}
-
-header p {
-  margin: 6px 0 0;
-  font-size: 13px;
-}
-
-main {
-  max-width: 700px;
-  margin: auto;
-  padding: 18px;
-}
-
-.card {
-  background: white;
-  padding: 18px;
-  border-radius: 14px;
-  margin: 14px 0;
-  box-shadow: 0 2px 10px #0000000c;
-}
-
-input, button {
-  width: 100%;
-  padding: 13px;
-  margin: 7px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 15px;
-}
-
-button {
-  background: #176b3a;
-  color: white;
-  border: 0;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-button.secondary {
-  background: #e8f2eb;
-  color: #176b3a;
-}
-
-.small {
-  font-size: 13px;
-  color: #66756b;
-}
-
-.message {
-  overflow-wrap: anywhere;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.stat {
-  font-size: 26px;
-  font-weight: bold;
-  color: #176b3a;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7f3;color:#20352a}
+header{background:#176b3a;color:white;padding:20px}
+header h2{margin:0}
+header p{margin:6px 0 0;font-size:13px}
+main{max-width:850px;margin:auto;padding:15px}
+.card{background:white;padding:17px;border-radius:13px;margin:13px 0;box-shadow:0 2px 10px #0000000c}
+input,button,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;font-size:15px}
+button{background:#176b3a;color:white;border:0;font-weight:bold}
+button.secondary{background:#e8f2eb;color:#176b3a}
+.small{font-size:13px;color:#66756b}
+.hidden{display:none!important}
+.order{border:1px solid #e1e9e2;border-radius:10px;padding:13px;margin:12px 0}
+.order h3{margin:0 0 8px;color:#176b3a}
+.status{font-weight:bold;color:#176b3a}
+.message{overflow-wrap:anywhere}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h2>🐟 FRESH FISH</h2>
-  <p>Admin Dashboard · Siliguri</p>
+<h2>🐟 FRESH FISH</h2>
+<p>Admin Dashboard · Siliguri</p>
 </header>
 
 <main>
 
-  <!-- ADMIN LOGIN -->
-  <section id="login" class="card">
-    <h3>Admin Login</h3>
-    <p class="small">Login with your authorised admin account.</p>
+<section id="login" class="card">
+<h3>Admin Login</h3>
 
-    <form id="loginForm">
-      <input
-        id="email"
-        type="email"
-        placeholder="Admin email"
-        autocomplete="username"
-        required
-      >
+<form id="loginForm">
+<input id="email" type="email" placeholder="Admin email" required>
+<input id="password" type="password" placeholder="Password" required>
+<button id="loginButton" type="submit">LOGIN</button>
+</form>
 
-      <input
-        id="password"
-        type="password"
-        placeholder="Password"
-        autocomplete="current-password"
-        required
-      >
+<p id="message" class="small message"></p>
+</section>
 
-      <button id="loginButton" type="submit">LOGIN</button>
-    </form>
+<section id="dashboard" class="hidden">
 
-    <p id="message" class="small message"></p>
-  </section>
+<div class="card">
+<h3>Welcome, Admin! 👋</h3>
+<button class="secondary" id="refreshButton">🔄 REFRESH ORDERS</button>
+<button id="logoutButton">LOG OUT</button>
+<p id="orderMessage" class="small"></p>
+</div>
 
-  <!-- ADMIN DASHBOARD -->
-  <section id="dashboard" class="hidden">
+<div class="card">
+<h3>📦 Customer Orders</h3>
+<div id="ordersList">
+Loading orders...
+</div>
+</div>
 
-    <div class="card">
-      <h3>Welcome, Admin! 👋</h3>
-      <p class="small">FRESH FISH management panel</p>
-      <button class="secondary" id="logoutButton" type="button">
-        LOG OUT
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>📦 Orders</h3>
-      <p class="small">
-        Customer orders will appear here after the order management
-        feature is connected.
-      </p>
-      <div class="stat">—</div>
-      <p class="small">Orders awaiting connection</p>
-    </div>
-
-    <div class="card">
-      <h3>🐠 Products</h3>
-      <p class="small">
-        Product management will be connected in the next setup step.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>💳 Payment Verification</h3>
-      <p class="small">
-        Verify UPI payments manually against your UPI app.
-        Never trust a customer-submitted screenshot alone.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>🚚 Delivery Management</h3>
-      <p class="small">
-        Delivery management will be connected after order management.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>📊 Sales Reports</h3>
-      <p class="small">
-        Sales reports will appear after the order database is connected.
-      </p>
-    </div>
-
-  </section>
-
+</section>
 </main>
 
-<!-- SUPABASE LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-// =====================================
 // SUPABASE CONFIGURATION
-// =====================================
-
 const SUPABASE_URL = "https://sfrnncyajgiuksxrvkyk.supabase.co";
-
 const SUPABASE_KEY = "sb_publishable_WYWEZSPU846BEZm5DpZ0ag_GuuZLECt";
 
 const supabaseClient = window.supabase.createClient(
@@ -204,82 +79,63 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_KEY
 );
 
-// =====================================
-// ELEMENTS
-// =====================================
-
 const loginSection = document.getElementById("login");
 const dashboardSection = document.getElementById("dashboard");
 const message = document.getElementById("message");
-const loginButton = document.getElementById("loginButton");
+const orderMessage = document.getElementById("orderMessage");
+const ordersList = document.getElementById("ordersList");
 
-// =====================================
-// CHECK ADMIN AUTHORIZATION
-// =====================================
-
+// CHECK ADMIN
 async function checkAdmin(user) {
-
-  const { data, error } = await supabaseClient
+  const {data,error} = await supabaseClient
     .from("admin_users")
     .select("user_id")
-    .eq("user_id", user.id)
+    .eq("user_id",user.id)
     .maybeSingle();
 
-  if (error) {
-    console.error("Admin check error:", error);
+  if(error) {
+    console.error(error);
     return false;
   }
 
   return !!data;
 }
 
-// =====================================
 // SHOW DASHBOARD
-// =====================================
-
 function showDashboard() {
   loginSection.classList.add("hidden");
   dashboardSection.classList.remove("hidden");
 }
 
-// =====================================
 // SHOW LOGIN
-// =====================================
-
 function showLogin() {
   dashboardSection.classList.add("hidden");
   loginSection.classList.remove("hidden");
 }
 
-// =====================================
-// ADMIN LOGIN
-// =====================================
-
-document.getElementById("loginForm").addEventListener("submit", async function(event) {
-
-  event.preventDefault();
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit",async function(e) {
+  e.preventDefault();
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
   message.textContent = "Logging in...";
-  loginButton.disabled = true;
+  document.getElementById("loginButton").disabled = true;
 
   try {
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
+    const {data,error} = await supabaseClient.auth.signInWithPassword({
+      email,password
     });
 
-    if (error) {
+    if(error) {
       message.textContent = "Login failed: " + error.message;
       return;
     }
 
     const authorised = await checkAdmin(data.user);
 
-    if (!authorised) {
+    if(!authorised) {
       await supabaseClient.auth.signOut();
       message.textContent = "You are not an authorised admin.";
       return;
@@ -287,67 +143,138 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
     message.textContent = "";
     showDashboard();
+    await loadOrders();
 
-  } catch (error) {
-
-    message.textContent = "Something went wrong. Please try again.";
-    console.error(error);
-
+  } catch(err) {
+    message.textContent = "Error: " + err.message;
   } finally {
-
-    loginButton.disabled = false;
-
+    document.getElementById("loginButton").disabled = false;
   }
-
 });
 
-// =====================================
-// ADMIN LOGOUT
-// =====================================
+// LOAD ORDERS
+async function loadOrders() {
+  ordersList.textContent = "Loading orders...";
+  orderMessage.textContent = "";
 
-document.getElementById("logoutButton").addEventListener("click", async function() {
+  const {data,error} = await supabaseClient
+    .from("orders")
+    .select("*")
+    .order("created_at",{ascending:false});
 
-  const { error } = await supabaseClient.auth.signOut();
+  if(error) {
+    ordersList.textContent = "Could not load orders: " + error.message;
+    console.error(error);
+    return;
+  }
 
-  if (error) {
-    message.textContent = "Logout failed: " + error.message;
+  if(!data || data.length === 0) {
+    ordersList.textContent = "No customer orders found yet.";
+    return;
+  }
+
+  ordersList.replaceChildren();
+
+  data.forEach(order => {
+    const card = document.createElement("div");
+    card.className = "order";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Order #" + order.id;
+
+    const details = document.createElement("p");
+    details.textContent =
+      "Customer: " + (order.customer_name || "N/A") +
+      "\nPhone: " + (order.phone || "N/A") +
+      "\nAddress: " + (order.address || "N/A") +
+      "\nTotal: ₹" + (order.total_amount ?? 0) +
+      "\nPayment: " + (order.payment_method || "N/A") +
+      "\nPayment Status: " + (order.payment_status || "pending") +
+      "\nOrder Date: " + (order.created_at || "N/A");
+    details.style.whiteSpace = "pre-line";
+
+    const label = document.createElement("p");
+    label.className = "status";
+    label.textContent = "Order Status: " + (order.order_status || "pending");
+
+    const select = document.createElement("select");
+
+    ["pending","confirmed","processing","out_for_delivery","delivered","cancelled"].forEach(status => {
+      const option = document.createElement("option");
+      option.value = status;
+      option.textContent = status.replaceAll("_"," ");
+      if(status === (order.order_status || "pending")) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    const updateButton = document.createElement("button");
+    updateButton.textContent = "UPDATE ORDER STATUS";
+
+    updateButton.addEventListener("click",async function() {
+      updateButton.disabled = true;
+      updateButton.textContent = "Updating...";
+
+      const {error:updateError} = await supabaseClient
+        .from("orders")
+        .update({order_status:select.value})
+        .eq("id",order.id);
+
+      if(updateError) {
+        alert("Update failed: " + updateError.message);
+      } else {
+        alert("Order status updated!");
+        await loadOrders();
+      }
+    });
+
+    card.append(heading,details,label,select,updateButton);
+    ordersList.appendChild(card);
+  });
+
+  orderMessage.textContent = data.length + " order(s) found.";
+}
+
+// REFRESH
+document.getElementById("refreshButton").addEventListener("click",loadOrders);
+
+// LOGOUT
+document.getElementById("logoutButton").addEventListener("click",async function() {
+  const {error} = await supabaseClient.auth.signOut();
+
+  if(error) {
+    alert("Logout failed: " + error.message);
     return;
   }
 
   document.getElementById("password").value = "";
-  message.textContent = "";
   showLogin();
-
 });
 
-// =====================================
-// RESTORE EXISTING SESSION
-// =====================================
-
+// RESTORE SESSION
 async function restoreSession() {
+  const {data,error} = await supabaseClient.auth.getSession();
 
-  const { data, error } = await supabaseClient.auth.getSession();
-
-  if (error || !data.session) {
+  if(error || !data.session) {
     showLogin();
     return;
   }
 
   const authorised = await checkAdmin(data.session.user);
 
-  if (authorised) {
+  if(authorised) {
     showDashboard();
+    await loadOrders();
   } else {
     await supabaseClient.auth.signOut();
     showLogin();
-    message.textContent = "You are not an authorised admin.";
+    message.textContent = "Not an authorised admin.";
   }
-
 }
 
 restoreSession();
 
 </script>
-
 </body>
 </html>
