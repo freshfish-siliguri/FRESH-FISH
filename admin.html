@@ -73,12 +73,47 @@ button.secondary{background:#e8f2eb;color:#176b3a}
 </div>
 </section>
 </main>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+ const SUPABASE_URL = "mjoonomfrolnsruvbrub";
+const SUPABASE_KEY = "sb_publishable_8GCXpEAdxGpXTfabs_VnhQ_5HykfCf7";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 // Supabase authentication will be connected after secure configuration.
-function loginAdmin(){
- document.getElementById("message").textContent =
- "Supabase connection is not configured yet. Please wait for the next setup step.";
+async function loginAdmin() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("message");
+
+  message.textContent = "Logging in...";
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    message.textContent = "Login failed: " + error.message;
+    return;
+  }
+
+  const { data: admin, error: adminError } = await supabaseClient
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", data.user.id)
+    .maybeSingle();
+
+  if (adminError || !admin) {
+    await supabaseClient.auth.signOut();
+    message.textContent = "You are not an authorised admin.";
+    return;
+  }
+
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+  message.textContent = "";
 }
 function logoutAdmin(){
  document.getElementById("dashboard").classList.add("hidden");
