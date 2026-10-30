@@ -18,6 +18,7 @@ h2{font-size:20px;margin:18px 0 12px}.grid{display:grid;grid-template-columns:re
 .overlay{display:none;position:fixed;inset:0;background:#07150fcc;z-index:10;padding:14px;overflow:auto}.modal{max-width:560px;margin:24px auto;background:white;border-radius:17px;padding:18px}.modalhead{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#edf2ee;border-radius:50%;width:34px;height:34px;font-size:20px}.cartline{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid .full{grid-column:1/-1}label{font-size:12px;font-weight:700;display:block;margin:9px 0 5px}.hint{font-size:11px;color:var(--muted);line-height:1.5}.total{font-size:18px;font-weight:850;margin:14px 0}.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:24px}
 @media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.photo{height:165px}}
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <header><div class="top"><div><div class="logo">🐟 FRESH FISH</div><div class="tag">FRESHNESS AT YOUR DOORSTEP</div></div><div class="pill">SILIGURI • HOME DELIVERY</div></div>
@@ -49,15 +50,42 @@ h2{font-size:20px;margin:18px 0 12px}.grid{display:grid;grid-template-columns:re
 </form><div id="confirmation" class="notice" style="display:none;margin-top:14px"></div>
 </div></div>
 <script>
-const products=[
-{id:1,cat:"Fish",bn:"রুই মাছ",en:"Rohu",price:360,unit:"প্রতি কেজি / kg",emoji:"🐟"},
-{id:2,cat:"Fish",bn:"কাতলা মাছ",en:"Katla",price:400,unit:"প্রতি কেজি / kg",emoji:"🐠"},
-{id:3,cat:"Fish",bn:"ইলিশ মাছ",en:"Hilsa",price:900,unit:"প্রতি কেজি / kg",emoji:"🐟"},
-{id:4,cat:"Fish",bn:"পাবদা মাছ",en:"Pabda",price:520,unit:"প্রতি কেজি / kg",emoji:"🐡"},
-{id:5,cat:"Chicken",bn:"ব্রয়লার মুরগি",en:"Broiler Chicken",price:240,unit:"প্রতি কেজি / kg",emoji:"🍗"},
-{id:6,cat:"Mutton",bn:"খাসির মাংস",en:"Mutton",price:850,unit:"প্রতি কেজি / kg",emoji:"🥩"},
-{id:7,cat:"Eggs",bn:"মুরগির ডিম",en:"Chicken Eggs",price:7,unit:"প্রতি পিস / piece",emoji:"🥚"}
-];
+let products = [];
+  const SUPABASE_URL = "https://sfrnncyajgiuksxrvkyk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WYWEZSPU846BEZm5DpZ0ag_GuuZLECt";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+async function loadProducts() {
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .eq("is_active", true)
+    .order("id");
+
+  if (error) {
+    document.getElementById("products").textContent =
+      "Products load failed: " + error.message;
+    return;
+  }
+
+  products = data.map(p => ({
+    id: p.id,
+    cat: p.category,
+    bn: p.description || p.name,
+    en: p.name,
+    price: Number(p.price),
+    unit: p.unit,
+    emoji: p.category === "Fish" ? "🐟" :
+           p.category === "Chicken" ? "🍗" :
+           p.category === "Mutton" ? "🥩" : "🥚"
+  }));
+
+  render();
+}
 let category="All",cart={};
 const cats=["All","Fish","Chicken","Mutton","Eggs"];
 const labels={All:"সব / All",Fish:"মাছ / Fish",Chicken:"মুরগি / Chicken",Mutton:"খাসি / Mutton",Eggs:"ডিম / Eggs"};
@@ -70,17 +98,6 @@ function openCart(){if(!Object.keys(cart).length){alert("কার্ট খা�
 function closeCart(){document.getElementById("overlay").style.display="none"}
 document.getElementById("search").addEventListener("input",render);document.getElementById("sort").addEventListener("change",render);
 document.getElementById("checkout").addEventListener("submit",e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target));let id="FF"+Date.now().toString().slice(-7);let lines=products.filter(p=>cart[p.id]).map(p=>`${p.bn} (${p.en}) x ${cart[p.id]} = Rs.${Math.round(p.price*cart[p.id])}`).join("\n");let total=products.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);document.getElementById("confirmation").style.display="block";document.getElementById("confirmation").innerHTML=`<b>Demo order created! / ডেমো অর্ডার তৈরি হয়েছে!</b><br>Order ID: <b>${id}</b><br>Name: ${data.name}<br>Subtotal: ₹${Math.round(total)}<br>Payment: ${data.payment}<br><br>এটি শুধু আপনার ফোনের demo preview। দোকানে অর্ডার পাঠানো বা পেমেন্ট নেওয়া হয়নি।`;cart={};updateCart();e.target.reset()});
-render();
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const SUPABASE_URL = "https://sfrnncyajgiuksxrvkyk.supabase.co";
-const SUPABASE_KEY = "sb_publishable_WYWEZSPU846BEZm5DpZ0ag_GuuZLECt";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+loadProducts();
 </script>
 </body></html>
