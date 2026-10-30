@@ -388,7 +388,6 @@ async function restoreSession() {
   showDashboard();
   await loadOrders();
   await loadProducts();
-  };
   } else {
     await supabaseClient.auth.signOut();
     showLogin();
