@@ -344,11 +344,36 @@ document.getElementById("addProductButton")
     const price = Number(document.getElementById("productPrice").value);
     const unit = document.getElementById("productUnit").value.trim();
     const description = document.getElementById("productDescription").value.trim();
+    const imageFile = document.getElementById("productImage").files[0];
     const msg = document.getElementById("productMessage");
 
     if (!name || !category || !unit || !Number.isFinite(price) || price <= 0) {
       msg.textContent = "Please fill all required fields correctly.";
       return;
+    }
+
+    let image_url = null;
+
+    if (imageFile) {
+      const fileExt = imageFile.name.split(".").pop();
+      const fileName = crypto.randomUUID() + "." + fileExt;
+
+      const { error: uploadError } = await supabaseClient
+        .storage
+        .from("product-images")
+        .upload(fileName, imageFile);
+
+      if (uploadError) {
+        msg.textContent = "Image upload failed: " + uploadError.message;
+        return;
+      }
+
+      const { data: urlData } = supabaseClient
+        .storage
+        .from("product-images")
+        .getPublicUrl(fileName);
+
+      image_url = urlData.publicUrl;
     }
 
     const { error } = await supabaseClient
@@ -359,6 +384,7 @@ document.getElementById("addProductButton")
         price,
         unit,
         description,
+        image_url,
         is_active: true
       }]);
 
@@ -372,6 +398,7 @@ document.getElementById("addProductButton")
     document.getElementById("productCategory").value = "";
     document.getElementById("productPrice").value = "";
     document.getElementById("productDescription").value = "";
+    document.getElementById("productImage").value = "";
 
     await loadProducts();
   });
